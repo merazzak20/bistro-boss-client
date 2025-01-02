@@ -1,0 +1,11 @@
+.featured-Item {
+  background: linear-gradient(
+      rgba(0, 0, 0, 0.5),
+      /* Top color */ rgba(0, 0, 0, 0.5) /* Bottom color */
+    ),
+    url("../../../assets/home/featured.jpg");
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-attachment: fixed;
+}
