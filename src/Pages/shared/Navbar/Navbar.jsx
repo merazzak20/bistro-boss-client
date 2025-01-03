@@ -1,10 +1,13 @@
 import React from "react";
 import { Link, NavLink } from "react-router-dom";
 import useAuth from "../../../hooks/useAuth";
+import { FaShoppingCart } from "react-icons/fa";
+import useCart from "../../../hooks/useCart";
 
 const Navbar = () => {
   const { signOutUser, user } = useAuth();
   console.log(user);
+  const [cart] = useCart();
   const handleLogOut = () => {
     signOutUser()
       .then(() => {})
@@ -33,6 +36,14 @@ const Navbar = () => {
       </li>
       <li>
         <Link to="/order/dessert">Food Order</Link>
+      </li>
+      <li>
+        <Link>
+          <button className="btn">
+            <FaShoppingCart className="mr-2"></FaShoppingCart>
+            <div className="badge badge-secondary">+{cart.length}</div>
+          </button>
+        </Link>
       </li>
 
       {user ? (

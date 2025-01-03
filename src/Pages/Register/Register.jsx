@@ -50,7 +50,7 @@ const Register = () => {
   };
 
   const navigate = useNavigate();
-  const regex = /^(?=.*[A-Z])(?=.*[a-z]).{6,}$/;
+  // const regex = /^(?=.*[A-Z])(?=.*[a-z]).{6,}$/;
 
   // const handleSignIn = (e) => {
   //   e.preventDefault();

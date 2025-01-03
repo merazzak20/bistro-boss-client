@@ -30,7 +30,7 @@ const Login = () => {
         // console.log(res.user);
         setUser(res.user);
         toast.success("Welcome" + " " + res.user.email);
-        navigate(location?.state ? location.state : "/");
+        navigate(location?.state?.from || "/");
       })
       .catch((err) => {
         toast.error(err.message);
