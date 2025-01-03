@@ -16,7 +16,7 @@ import "@smastrom/react-rating/style.css";
 const Testimonial = () => {
   const [reviews, setReviews] = useState([]);
   useEffect(() => {
-    fetch("reviews.json")
+    fetch("http://localhost:9000/reviews")
       .then((res) => res.json())
       .then((data) => setReviews(data));
   }, []);

@@ -1,13 +1,21 @@
 import React from "react";
 import { Link, NavLink } from "react-router-dom";
+import useAuth from "../../../hooks/useAuth";
 
 const Navbar = () => {
+  const { signOutUser, user } = useAuth();
+  console.log(user);
+  const handleLogOut = () => {
+    signOutUser()
+      .then(() => {})
+      .catch((err) => console.log(err));
+  };
   const links = (
     <>
       <li>
-        <NavLink to="/">Home</NavLink>
+        <Link to="/">Home</Link>
       </li>
-      <li>
+      {/* <li>
         <details>
           <summary>Parent</summary>
           <ul className="p-2">
@@ -19,10 +27,28 @@ const Navbar = () => {
             </li>
           </ul>
         </details>
+      </li> */}
+      <li>
+        <Link to="/menu">Menu</Link>
       </li>
       <li>
-        <NavLink>Item 3</NavLink>
+        <Link to="/order/dessert">Food Order</Link>
       </li>
+
+      {user ? (
+        <>
+          {user && <p>{user.displayName}</p>}
+          <button onClick={handleLogOut} className="btn btn-ghost">
+            Logout
+          </button>
+        </>
+      ) : (
+        <>
+          <li>
+            <Link to="/login">Login</Link>
+          </li>
+        </>
+      )}
     </>
   );
   return (
