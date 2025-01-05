@@ -1,41 +1,42 @@
 import React, { useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { FcGoogle } from "react-icons/fc";
+
 import { toast } from "react-toastify";
 
 import useAuth from "../../hooks/useAuth";
 import { Helmet } from "react-helmet-async";
 import { useForm } from "react-hook-form";
+import useAxiosPublic from "../../hooks/useAxiosPublic";
+import SocialLogins from "../../components/SocialLogins";
 
 const Register = () => {
-  const {
-    createNewUser,
-    googleSignIn,
-    setUser,
-    updateUserProfile,
-    signOutUser,
-  } = useAuth();
+  const navigate = useNavigate();
+  const { createNewUser, setUser, updateUserProfile, signOutUser } = useAuth();
   const {
     register,
     handleSubmit,
-    watch,
     reset,
     formState: { errors },
   } = useForm();
+  const axiosPublic = useAxiosPublic();
   const onSubmit = (data) => {
     createNewUser(data.email, data.password)
       .then((res) => {
         setUser(res.user);
         console.log(res.user);
-        toast.success("Successfully Registered");
-        signOutUser();
-        navigate("/");
 
         updateUserProfile(data.name, data.photo)
           .then(() => {
-            signOutUser();
-            navigate("/");
-            reset();
+            const registeredUser = { name: data.name, email: data.email };
+            axiosPublic.post("/users", registeredUser).then((res) => {
+              if (res.data.insertedId) {
+                reset();
+                signOutUser();
+                navigate("/");
+                toast.success("Successfully Registered");
+              }
+            });
+
             // console.log(2);
           })
           .catch((error) => {
@@ -49,66 +50,6 @@ const Register = () => {
       });
   };
 
-  const navigate = useNavigate();
-  // const regex = /^(?=.*[A-Z])(?=.*[a-z]).{6,}$/;
-
-  // const handleSignIn = (e) => {
-  //   e.preventDefault();
-  //   const form = new FormData(e.target);
-
-  //   const name = form.get("name");
-  //   const photo = form.get("photo");
-  //   const email = form.get("email");
-  //   const password = form.get("password");
-  //   // console.log(name, photo, email, password);
-
-  //   if (!regex.test(password)) {
-  //     toast.warn("invalid password");
-  //     return;
-  //   }
-
-  //   createNewUser(email, password)
-  //     .then((res) => {
-  //       setUser(res.user);
-  //       // console.log(res.user);
-  //       // updateUserProfile({ dispalyName: name, photoURL: photo })
-  //       updateUserProfile({
-  //         displayName: name,
-  //         photoURL: photo,
-  //       })
-  //         .then(() => {
-  //           signOutUser();
-  //           navigate("/");
-  //           // console.log(2);
-  //         })
-  //         .catch((error) => {
-  //           // console.log(error);
-  //           toast.warn("Somthing Wrong");
-  //         });
-  //     })
-  //     .catch((err) => {
-  //       // console.log(err.message);
-  //       toast.warn("Somthing Wrong");
-  //     });
-  // };
-
-  const handleGoogleSignIn = () => {
-    googleSignIn()
-      .then((res) => {
-        setUser(res.user);
-        // console.log(res.user);
-        updateUserProfile({ dispalyName: displayName, photoURL: photoURL })
-          .then(() => {
-            navigate("/");
-          })
-          .catch((error) => {
-            // console.log(error);
-          });
-      })
-      .catch((err) => {
-        // console.log(err.message);
-      });
-  };
   return (
     <div className="flex justify-center items-center min-h-screen">
       <Helmet>
@@ -206,15 +147,7 @@ const Register = () => {
           {/* {errorMessage && <p className="text-red-600">{errorMessage}</p>}
           {success && <p className="text-green-600">Successfully Sign In</p>} */}
         </form>
-        <div className="mx-auto -mt-5">
-          <button
-            onClick={handleGoogleSignIn}
-            className="flex justify-arround items-center gap-4 bg-gray-100 btn"
-          >
-            <FcGoogle />
-            <span className="font-semibold">Login with Google</span>
-          </button>
-        </div>
+        <SocialLogins></SocialLogins>
 
         <p className="text-center ">
           Already have an account? Please{" "}

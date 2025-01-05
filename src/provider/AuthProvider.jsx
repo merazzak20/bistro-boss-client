@@ -10,8 +10,9 @@ import {
   updateProfile,
 } from "firebase/auth";
 import { auth } from "../firebase/firebase.confiq";
-import axios from "axios";
+
 import AuthContext from "./AuthContext";
+import useAxiosPublic from "../hooks/useAxiosPublic";
 
 // export const AuthContext = createContext(null);
 
@@ -20,6 +21,7 @@ const googleProvider = new GoogleAuthProvider();
 const AuthProvider = ({ children }) => {
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const axiosPublic = useAxiosPublic();
 
   const createNewUser = (email, password) => {
     setLoading(true);
@@ -53,36 +55,28 @@ const AuthProvider = ({ children }) => {
     const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
       setUser(currentUser);
       console.log("CurrentUser-->", currentUser);
+      if (currentUser) {
+        const userInfo = { email: currentUser.email };
+        axiosPublic.post("/jwt", userInfo).then((res) => {
+          if (res.data.token) {
+            try {
+              console.log(res.data.token);
+              localStorage.setItem("access-token", res.data.token);
+              console.log("Token saved to localStorage");
+            } catch (error) {
+              console.error("Error saving token to localStorage:", error);
+            }
+          }
+        });
+      } else {
+        localStorage.removeItem("access-token");
+      }
       setLoading(false);
-      //   if (currentUser?.email) {
-      //     const user = { email: currentUser.email };
-      //     axios
-      //       .post(`${import.meta.env.VITE_API_URL}/jwt`, user, {
-      //         withCredentials: true,
-      //       })
-      //       .then((res) => {
-      //         // console.log(res.data),
-      //         setLoading(false);
-      //       });
-      //   } else {
-      //     axios
-      //       .post(
-      //         `${import.meta.env.VITE_API_URL}/logout`,
-      //         {},
-      //         {
-      //           withCredentials: true,
-      //         }
-      //       )
-      //       .then((res) => {
-      //         // console.log(res.data),
-      //         setLoading(false);
-      //       });
-      //   }
     });
     return () => {
       return unsubscribe();
     };
-  }, []);
+  }, [axiosPublic]);
 
   const authInfo = {
     user,

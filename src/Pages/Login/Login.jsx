@@ -8,9 +8,10 @@ import useAuth from "../../hooks/useAuth";
 import { toast } from "react-toastify";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { Helmet } from "react-helmet-async";
+import SocialLogins from "../../components/SocialLogins";
 
 const Login = () => {
-  const { googleSignIn, userSignIn, setUser, user } = useAuth();
+  const { userSignIn, setUser, user } = useAuth();
   const [disabled, setDisabled] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
@@ -117,6 +118,7 @@ const Login = () => {
               />
             </div>
           </form>
+          <SocialLogins></SocialLogins>
           <p className="text-center ">
             Don't have an account?{" "}
             <Link className="text-red-500" to="/register">
