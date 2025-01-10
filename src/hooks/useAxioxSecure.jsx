@@ -3,7 +3,7 @@ import { useNavigate } from "react-router-dom";
 import useAuth from "./useAuth";
 
 const axiosSecure = axios.create({
-  baseURL: "http://localhost:9000",
+  baseURL: "https://bistro-boss-server-phi-khaki.vercel.app",
 });
 const useAxioxSecure = () => {
   const { signOutUser } = useAuth();

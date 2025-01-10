@@ -12,15 +12,20 @@ import { Navigation } from "swiper/modules";
 import { Rating } from "@smastrom/react-rating";
 
 import "@smastrom/react-rating/style.css";
+import useAxiosPublic from "../../../hooks/useAxiosPublic";
 
 const Testimonial = () => {
   const [reviews, setReviews] = useState([]);
+  const axiosPublic = useAxiosPublic();
   console.log(reviews);
   useEffect(() => {
-    fetch("http://localhost:9000/reviews")
-      .then((res) => res.json())
-      .then((data) => setReviews(data));
-  }, []);
+    const fetchReview = async () => {
+      const res = await axiosPublic.get("/reviews");
+      setReviews(res?.data);
+    };
+    fetchReview();
+  }, [axiosPublic]);
+
   return (
     <section>
       <SectionTitle

@@ -63,6 +63,7 @@ const AuthProvider = ({ children }) => {
               console.log(res.data.token);
               localStorage.setItem("access-token", res.data.token);
               console.log("Token saved to localStorage");
+              setLoading(false);
             } catch (error) {
               console.error("Error saving token to localStorage:", error);
             }
@@ -70,8 +71,8 @@ const AuthProvider = ({ children }) => {
         });
       } else {
         localStorage.removeItem("access-token");
+        setLoading(false);
       }
-      setLoading(false);
     });
     return () => {
       return unsubscribe();

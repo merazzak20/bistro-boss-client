@@ -1,6 +1,7 @@
 import React from "react";
 import {
   FaCalendar,
+  FaHistory,
   FaHome,
   FaList,
   FaShoppingCart,
@@ -82,6 +83,12 @@ const Dashboard = () => {
                 <NavLink to="/dashboard/bookings">
                   <FaList></FaList>
                   My Bookings
+                </NavLink>
+              </li>
+              <li>
+                <NavLink to="/dashboard/paymentHistory">
+                  <FaHistory></FaHistory>
+                  Payment History
                 </NavLink>
               </li>
             </>

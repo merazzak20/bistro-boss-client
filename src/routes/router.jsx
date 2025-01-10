@@ -13,6 +13,10 @@ import AddItems from "../Pages/Dashboard/Admin/AddItems";
 import AdminRoute from "./AdminRoute";
 import ManageItems from "../Pages/Dashboard/Admin/ManageItems";
 import UpdateItem from "../Pages/Dashboard/Admin/UpdateItem";
+import Payment from "../Pages/Dashboard/Payment";
+import PaymentHistory from "../Pages/Dashboard/PaymentHistory";
+import AdminHome from "../Pages/Dashboard/Admin/AdminHome";
+import UserHome from "../Pages/Dashboard/UserHome";
 
 export const router = createBrowserRouter([
   {
@@ -50,12 +54,33 @@ export const router = createBrowserRouter([
       </PrivateRouter>
     ),
     children: [
+      // Normal User Routes
+      {
+        path: "userHome",
+        element: <UserHome></UserHome>,
+      },
       {
         path: "cart",
         element: <Cart></Cart>,
       },
+      {
+        path: "payment",
+        element: <Payment></Payment>,
+      },
+      {
+        path: "paymentHistory",
+        element: <PaymentHistory></PaymentHistory>,
+      },
 
       // Admin Routes
+      {
+        path: "adminHome",
+        element: (
+          <AdminRoute>
+            <AdminHome></AdminHome>
+          </AdminRoute>
+        ),
+      },
       {
         path: "allUsers",
         element: (
@@ -88,7 +113,9 @@ export const router = createBrowserRouter([
           </AdminRoute>
         ),
         loader: ({ params }) =>
-          fetch(`http://localhost:9000/menu/${params.id}`),
+          fetch(
+            `https://bistro-boss-server-phi-khaki.vercel.app/menu/${params.id}`
+          ),
       },
     ],
   },

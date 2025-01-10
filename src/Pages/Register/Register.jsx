@@ -31,7 +31,7 @@ const Register = () => {
             axiosPublic.post("/users", registeredUser).then((res) => {
               if (res.data.insertedId) {
                 reset();
-                signOutUser();
+                // signOutUser();
                 navigate("/");
                 toast.success("Successfully Registered");
               }
